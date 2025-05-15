@@ -1,0 +1,32 @@
+{
+  "Social Media": {
+    "count": 88408,
+    "total_length": 12152797,
+    "average_length": 137.46263912768075,
+    "percentage_of_records": 913.8722348563158
+  },
+  "Forum Post": {
+    "count": 83546,
+    "total_length": 24424312,
+    "average_length": 292.3456778301774,
+    "percentage_of_records": 863.6138102129419
+  },
+  "Online Review": {
+    "count": 79758,
+    "total_length": 23124777,
+    "average_length": 289.93677123297977,
+    "percentage_of_records": 824.4573082489147
+  },
+  "Blog/News Article Comment": {
+    "count": 77472,
+    "total_length": 22074532,
+    "average_length": 284.9356154481619,
+    "percentage_of_records": 800.8269588587968
+  },
+  "Online Ad": {
+    "count": 45936,
+    "total_length": 11555093,
+    "average_length": 251.547653256705,
+    "percentage_of_records": 474.83977672110814
+  }
+}
