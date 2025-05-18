@@ -2,6 +2,8 @@
 
 **PANORAMA** (Profile-based Assemblage for Naturalistic Online Representation and Attribute Memorization Analysis) is a synthetic data pipeline developed for generating realistic, PII-rich datasets that simulate online human behavior. This repository contains all components required to create, process, and manage synthetic data suitable for pretraining and privacy-risk analysis in LLMs.
 
+[PANORAMA as HuggingFace dataset](https://huggingface.co/datasets/srirxml/PANORAMA)
+
 ## 📁 Project Structure
 
 ```
@@ -133,14 +135,7 @@ DataGeneration/
 - Python 3.8+
 - `Faker`
 - `datasets`
-- Azure OpenAI SDK (for inference)
-
-Install all dependencies:
-
-```bash
-pip install -r requirements.txt
-```
-
+- OpenAI SDK (for inference)
 ---
 
 ## 🔐 Ethics & Usage
