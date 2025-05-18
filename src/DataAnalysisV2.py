@@ -184,53 +184,57 @@ def create_plot_dir(dir_name=OUTPUT_PLOT_DIR):
         os.makedirs(dir_name)
     return dir_name
 
-def plot_distribution(data_series, title, xlabel, ylabel="Frequency", kind='bar', top_n=None, output_dir=OUTPUT_PLOT_DIR, palette=None, rotate_labels=False):
+def plot_distribution(
+    data_series,
+    title,
+    xlabel,
+    ylabel="Frequency",
+    kind='bar',
+    top_n=None,
+    output_dir=OUTPUT_PLOT_DIR,
+    palette=None,
+    rotate_labels=False
+):
+    font_size = 14  # Unified font size for title, labels, and ticks
     plt.figure(figsize=(12, 7))
     current_palette = palette if palette is not None else categorical_palette
 
     if kind == 'hist':
-        hist_palette_name = palette if palette else sequential_palette_name # Use string name for seaborn
-        # If palette is a list (e.g. a single color), use color= argument
+        hist_palette_name = palette if palette else sequential_palette_name
         if isinstance(hist_palette_name, list):
-             sns.histplot(data_series.dropna(), kde=True, color=hist_palette_name[0])
-        else: # It's a string name of a palette
-             sns.histplot(data_series.dropna(), kde=True, palette=hist_palette_name)
+            sns.histplot(data_series.dropna(), kde=True, color=hist_palette_name[0])
+        else:
+            sns.histplot(data_series.dropna(), kde=True, palette=hist_palette_name)
 
     elif kind == 'bar':
         counts = data_series.value_counts()
         if top_n:
             counts = counts.head(top_n)
         bar_palette = current_palette
-        if isinstance(current_palette, list) and len(counts) > 0 : # Check if counts is not empty
+        if isinstance(current_palette, list) and len(counts) > 0:
             if len(counts) > len(current_palette):
                 bar_palette = [current_palette[i % len(current_palette)] for i in range(len(counts))]
-            elif isinstance(current_palette, list):
+            else:
                 bar_palette = current_palette[:len(counts)]
-        elif not isinstance(current_palette, list) and len(counts) > 0: # It's a string name
+        elif not isinstance(current_palette, list) and len(counts) > 0:
             bar_palette = sns.color_palette(current_palette, len(counts))
 
-
-        if not counts.empty: # Only plot if there are counts
+        if not counts.empty:
             sns.barplot(x=counts.index, y=counts.values, palette=bar_palette)
             if rotate_labels or (len(counts.index) > 5 and counts.index.astype(str).str.len().max() > 10):
-                plt.xticks(rotation=45, ha="right", fontsize=15)
+                plt.xticks(rotation=45, ha="right", fontsize=font_size)
             else:
-                plt.xticks(fontsize=15)
-            plt.yticks(fontsize=15)
-
+                plt.xticks(fontsize=font_size)
+            plt.yticks(fontsize=font_size)
         else:
-            plt.text(0.5, 0.5, "No data to display", ha='center', va='center')
+            plt.text(0.5, 0.5, "No data to display", ha='center', va='center', fontsize=font_size)
 
-
-    #plt.title(title, fontsize=16, pad=20)
-    #plt.xlabel(xlabel, fontsize=12)
-    #Disable xlabel to avoid clutter
-    plt.xlabel("")
-    plt.ylabel("")
+    plt.title("", fontsize=font_size, pad=20)
+    plt.xlabel(xlabel, fontsize=font_size)
+    plt.ylabel(ylabel, fontsize=font_size)
     plt.tight_layout()
     plt.savefig(os.path.join(output_dir, f"{title.replace(' ', '_').replace('/', '_').replace(':', '').lower()}.png"), dpi=300)
     plt.close()
-
 
 def plot_stacked_bar(df_grouped, title, xlabel, ylabel, output_dir=OUTPUT_PLOT_DIR, palette=None):
     current_palette = palette if palette is not None else categorical_palette
@@ -280,7 +284,7 @@ def plot_boolean_comparison(df, bool_column_name, compare_column_name, title, ou
     hue_palette = current_palette[:2] if isinstance(current_palette, list) else sns.color_palette(current_palette, 2)
 
     sns.barplot(x=compare_column_name, y='percentage', hue=bool_column_name, data=counts, palette=hue_palette)
-    plt.title(title, fontsize=16, pad=20)
+    plt.title("", fontsize=16, pad=20)
     plt.xlabel(compare_column_name, fontsize=12)
     plt.ylabel('Percentage within Group (%)', fontsize=12)
     plt.xticks(rotation=45, ha="right")
@@ -290,6 +294,60 @@ def plot_boolean_comparison(df, bool_column_name, compare_column_name, title, ou
     plt.close()
 
 def plot_pii_field_by_content_type(df_exploded_pii, title, output_dir=OUTPUT_PLOT_DIR, palette=None):
+    current_palette = palette if palette is not None else categorical_palette
+    if df_exploded_pii.empty or 'mentioned_pii_fields' not in df_exploded_pii.columns or 'content_type' not in df_exploded_pii.columns:
+        print("Not enough data to plot PII field by content type.")
+        return
+
+    pii_content_counts = df_exploded_pii.groupby(['mentioned_pii_fields', 'content_type']).size().unstack(fill_value=0)
+
+    if pii_content_counts.empty:
+        print("No PII mentions found to plot by content type.")
+        return
+
+    num_pii_fields = len(pii_content_counts.index)
+    num_content_types = len(pii_content_counts.columns)
+    
+    if num_content_types == 0:
+        print("No content types found for PII field breakdown plot.")
+        return
+
+    # Prepare palette
+    if isinstance(current_palette, list):
+        if num_content_types > len(current_palette):
+            bar_palette = [current_palette[i % len(current_palette)] for i in range(num_content_types)]
+        else:
+            bar_palette = current_palette[:num_content_types]
+    else:
+        bar_palette = sns.color_palette(current_palette, num_content_types)
+    
+    fig_width = max(15, num_pii_fields * 1.0 + num_content_types * 0.5)
+    fig_height = 8 + num_pii_fields * 0.15
+
+    fig, ax = plt.subplots(figsize=(fig_width, fig_height))
+    pii_content_counts.plot(kind='bar', width=0.75, color=bar_palette, ax=ax)
+
+    # Set all font sizes uniformly
+    title_fontsize = 18
+    label_fontsize = 20
+    tick_fontsize = 20
+
+    ax.set_title("", fontsize=title_fontsize, pad=20)
+    ax.set_xlabel("", fontsize=label_fontsize)
+    ax.set_ylabel("Frequency", fontsize=label_fontsize)
+
+    ax.tick_params(axis='x', rotation=60, labelsize=tick_fontsize, labelrotation=60)
+    ax.tick_params(axis='y', labelsize=tick_fontsize)
+
+    ax.set_xticklabels(ax.get_xticklabels(), ha="right")
+
+    ax.grid(axis='y', linestyle='--', alpha=0.7)
+
+    fig.tight_layout(rect=[0, 0.07, 1, 1])
+    fig.savefig(os.path.join(output_dir, f"{title.replace(' ', '_').replace('/', '_').replace(':', '').lower()}.png"), dpi=300)
+    plt.close()
+
+def plot_pii_field_by_content_type2(df_exploded_pii, title, output_dir=OUTPUT_PLOT_DIR, palette=None):
     current_palette = palette if palette is not None else categorical_palette
     if df_exploded_pii.empty or 'mentioned_pii_fields' not in df_exploded_pii.columns or 'content_type' not in df_exploded_pii.columns:
         print("Not enough data to plot PII field by content type.")
@@ -328,8 +386,8 @@ def plot_pii_field_by_content_type(df_exploded_pii, title, output_dir=OUTPUT_PLO
     #Disable xlabel to avoid clutter
     ax.set_title("")
     ax.set_xlabel("")
-    ax.set_ylabel("")
-    #ax.set_yticks(fontsize=20)
+    ax.set_ylabel("Frequency", fontsize=18)
+    ax.set_yticks(fontsize=18)
     ax.set_yticks(ax.get_yticks())  # Use current tick positions
     ax.tick_params(axis='y', labelsize=10)
     ax.set_xticklabels(ax.get_xticklabels(), rotation=60, ha="right", fontsize=20)
@@ -524,7 +582,8 @@ def main():
                 plt.figure(figsize=(12, 7))
                 current_pal = categorical_palette[:len(avg_mentions_by_age)] if isinstance(categorical_palette, list) else categorical_palette
                 sns.barplot(x=avg_mentions_by_age.index, y=avg_mentions_by_age.values, palette=current_pal)
-                plt.title("Average Number of PII Fields Mentioned by PII Age Group", fontsize=16, pad=20)
+                plt.title("", fontsize=16, pad=20)
+                #plt.title("Average Number of PII Fields Mentioned by PII Age Group", fontsize=16, pad=20)
                 plt.xlabel("PII Age Group", fontsize=12)
                 plt.ylabel("Avg. Num PII Fields Mentioned", fontsize=12)
                 plt.tight_layout()
@@ -550,7 +609,8 @@ def main():
                     plt.figure(figsize=(14, 8))
                     current_pal = categorical_palette[:len(mentions_by_job)] if isinstance(categorical_palette, list) else categorical_palette
                     sns.barplot(x=mentions_by_job.index, y=mentions_by_job.values, palette=current_pal)
-                    plt.title(f"PII Mention Rate by PII Job Title (Top {len(mentions_by_job)})", fontsize=16, pad=20)
+                    plt.title(f"", fontsize=16, pad=20)
+                    #plt.title(f"PII Mention Rate by PII Job Title (Top {len(mentions_by_job)})", fontsize=16, pad=20)
                     plt.xlabel("PII Job Title", fontsize=12)
                     plt.ylabel("Texts with PII Mentions (%)", fontsize=12)
                     plt.xticks(rotation=45, ha="right")

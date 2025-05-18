@@ -1,65 +1,150 @@
-# File description
+# PANORAMA Data Generation Pipeline
 
-### DataGeneration/Project/WikiSeedDataGeneration.py
-Reads `wikimedia/structured-wikipedia` from HuggingFace and extracts the following fields
- - Name
- - URL
- - Abstract
- - Wikipedia_Content
- - Personal_Life
- - Early_Life
+**PANORAMA** (Profile-based Assemblage for Naturalistic Online Representation and Attribute Memorization Analysis) is a synthetic data pipeline developed for generating realistic, PII-rich datasets that simulate online human behavior. This repository contains all components required to create, process, and manage synthetic data suitable for pretraining and privacy-risk analysis in LLMs.
 
-Saves it to `DataGeneration/Data/wikipedia_people_{timestamp}.tsv`
-Same is converted to JSONL here `DataGeneration/Data/wikipedia_people_{timestamp}.jsonl`
+## 📁 Project Structure
 
-### DataGeneration/Project/SyntheticProfileGenerator.py
-A constrained synthetic data generator that uses Faker library to create data for following locales
 ```
-'en_US', 'en_GB', 'en_CA', 'en_AU', 'en_NZ', 'en_IE', 'en_IN', 'en_PH'
+DataGeneration/
+├── Data/                            # Stores all generated intermediate and final files
+├── Project/
+│   ├── WikiSeedDataGeneration.py
+│   ├── SyntheticProfileGenerator.py
+│   ├── PromptSyntheticDataGenTemplatedApproachV1.md
+│   ├── SubmitToAzureFoundry.py
+│   ├── ExtractGeneratedSyntheticPassage.py
+│   ├── SyntheticSocialDataGenPrompt.md
+│   ├── AzureGenerateSyntheticTrainingData.py
+│   └── process_synthetic_data.py
 ```
-Saves created data to `DataGeneration/Data/synthetic_profiles_{timestamp}.tsv`
 
-### DataGeneration/Project/PromptSyntheticDataGenTemplatedApproachV1.md
-Step 1 of synthetic data generation.
-Takes the following inputs,
+---
 
- - synthetic_profile_json generated in `SyntheticProfileGenerator.py`
- - real_wiki_inspiration_text generated in `WikiSeedDataGeneration.py`
+## 🔄 Pipeline Overview
 
-Produces a synthetic wikipedia style article
+### 1. Wikipedia-Inspired Article Seeding
 
-### DataGeneration/Project/SubmitToAzureFoundry.py
-Uses the `PromptSyntheticDataGenTemplatedApproachV1.md` and submits it to Azure AI Foundry O3-Mini endpoint to generate the synthetic article on a person entity.
+**Script:** `WikiSeedDataGeneration.py`  
+**Input:** [HuggingFace dataset](https://huggingface.co/datasets/wikimedia/structured-wikipedia)  
+**Extracted Fields:**
+- Name
+- URL
+- Abstract
+- Wikipedia Content
+- Personal Life
+- Early Life
 
-Results saved in `DataGeneration/Data/azure_batch_job_{timestamp}.live.jsonl`
+**Output:**
+- `wikipedia_people_{timestamp}.tsv`
+- `wikipedia_people_{timestamp}.jsonl`
 
-Aggregated results are in `DataGeneration/Data/generated_passages_azure_results.10K.jsonl`
+---
 
-### DataGeneration/Project/ExtractGeneratedSyntheticPassage.py
-The generation prompt produces the following
+### 2. Synthetic Profile Generation
 
- - [Synthetic Article]
- - [Real Person Text Usage Notes]
- - [Synthetic Profile Usage Notes]
+**Script:** `SyntheticProfileGenerator.py`  
+**Function:** Generates synthetic human profiles using [Faker](https://faker.readthedocs.io/en/master/) for 8 English locales:  
+`['en_US', 'en_GB', 'en_CA', 'en_AU', 'en_NZ', 'en_IE', 'en_IN', 'en_PH']`
 
-Extract the [Synthetic Article] for the next step here
+**Output:**  
+- `synthetic_profiles_{timestamp}.tsv`
 
-Results stored in `DataGeneration/Data/extracted_passages_azure_results.10K.jsonl`
+---
 
-### DataGeneration/Project/SyntheticSocialDataGenPrompt.md
-Prompt that consumes `Synthetic Persona Article` and `Synthetic Profile Json` and produces a synthetic data in the following formats
+### 3. Article Synthesis (Step 1)
 
-- Social Media
-- Forum Posts
-- Online Review
-- Blog/News Article Comment
-- Online Marketplace/Classified Ad Listing
+**Template:** `PromptSyntheticDataGenTemplatedApproachV1.md`  
+**Input:**  
+- Synthetic Profile JSON (from Step 2)  
+- Wikipedia Inspiration Text (from Step 1)
 
-### DataGeneration/Project/AzureGenerateSyntheticTrainingData.py
-Use the `SyntheticSocialDataGenPrompt.md` along with `extracted_passages_azure_results.10K.jsonl` to generate the synthetic variety data in `Azure_Synthetic_Data_10K.{split}_{timestamp}.live_output.jsonl.`
+**Function:** Combines structured profiles with Wikipedia-style narrative cues to synthesize realistic biographies.
 
-Aggregated results are in `DataGeneration/Data/Azure_Synthetic_Data_10K.combined.jsonl`
+---
 
-### DataGeneration/Project/process_synthetic_data.py
-Extracts the various synthetic data generated into `DataGeneration/Data/Azure_Synthetic_Data_10K.processed.jsonl`.
-Also creates the HuggingFace Dataset at `DataGeneration/Data/Azure_Synthetic_Data_10K.pretraining.hf.tsv`
+### 4. Article Generation via Azure OpenAI
+
+**Script:** `SubmitToAzureFoundry.py`  
+**Model Used:** Azure AI Foundry (OpenAI o3-mini)  
+**Input:** Prompt from Step 3  
+**Output:**
+- Raw: `azure_batch_job_{timestamp}.live.jsonl`
+- Aggregated: `generated_passages_azure_results.10K.jsonl`
+
+---
+
+### 5. Extracting Synthetic Articles
+
+**Script:** `ExtractGeneratedSyntheticPassage.py`  
+**Function:** Isolates the `[Synthetic Article]` section from the generated outputs for downstream use.  
+**Output:**  
+- `extracted_passages_azure_results.10K.jsonl`
+
+---
+
+### 6. Generating Synthetic Social Content
+
+**Template:** `SyntheticSocialDataGenPrompt.md`  
+**Script:** `AzureGenerateSyntheticTrainingData.py`  
+**Input:**  
+- `extracted_passages_azure_results.10K.jsonl`  
+- Synthetic profiles
+
+**Generated Formats:**  
+- Social Media Posts  
+- Forum Posts  
+- Online Reviews  
+- Blog/News Comments  
+- Online Marketplace Listings  
+
+**Output:**
+- `Azure_Synthetic_Data_10K.{split}_{timestamp}.live_output.jsonl`  
+- Combined: `Azure_Synthetic_Data_10K.combined.jsonl`
+
+---
+
+### 7. Data Post-Processing
+
+**Script:** `process_synthetic_data.py`  
+**Function:** Cleans, normalizes, and prepares the dataset for pretraining.  
+**Final Output:**
+- Processed: `Azure_Synthetic_Data_10K.processed.jsonl`  
+- HF Pretraining Format: `Azure_Synthetic_Data_10K.pretraining.hf.tsv`
+
+---
+
+## 📊 Dataset Summary
+
+- **Profiles Generated:** ~9,674  
+- **Synthetic Articles:** 9,674  
+- **Total Synthetic Samples:** ~384,789  
+- **Content Types:**  
+  - Wikipedia-style Biographies  
+  - Social Media Posts  
+  - Forum Threads  
+  - Online Reviews  
+  - Blog Comments  
+  - Marketplace Listings  
+
+---
+
+## 📦 Dependencies
+
+- Python 3.8+
+- `Faker`
+- `datasets`
+- Azure OpenAI SDK (for inference)
+
+Install all dependencies:
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🔐 Ethics & Usage
+
+PANORAMA is a **synthetic dataset** developed with no use of real PII. It is intended **solely for research** into privacy risks, model memorization, and responsible AI development. Do not use this dataset for real-world PII applications.
+
+---
