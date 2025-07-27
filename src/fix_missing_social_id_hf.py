@@ -128,4 +128,3 @@ def upload_dataset(dataset: Dataset, repo_name: str = "PANORAMA-IdCtText") -> No
 
 if __name__ == "__main__":
     processed_dataset = process_dataset()
-    #upload_dataset(processed_dataset)

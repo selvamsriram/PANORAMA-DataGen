@@ -1,6 +1,0 @@
-/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Project/process_synthetic_data.py:77: SyntaxWarning: invalid escape sequence '\['
-  matches = re.finditer(f'({pattern})(.*?)(?=\[|$)', text, re.DOTALL)
-  File "/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Project/process_synthetic_data.py", line 155
-    'UniqueID': record['synthetic_pii_input']['Unique ID']",
-                                                          ^
-SyntaxError: unterminated string literal (detected at line 155)

@@ -301,7 +301,7 @@ if __name__ == "__main__":
 
     # Input Files
     parser.add_argument("--api-key-file", default="/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Project/api_key.txt", help="Path to the file containing the Azure OpenAI API key.")
-    parser.add_argument("--prompt-file", default="/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Project/SyntheticSocialDataGenPrompt.md", help="Path to the system prompt file.")
+    parser.add_argument("--prompt-file", default="/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/prompts/synthetic_online_text_gen_prompt.md", help="Path to the system prompt file.")
     parser.add_argument("--input-file", default="/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/extracted_passages_azure_results.10K.03.jsonl", help="Path to the extracted and generated passages JSONL file.")
 
     # Output File
