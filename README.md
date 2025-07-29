@@ -45,7 +45,7 @@ PANORAMA generates fully synthetic datasets that closely emulate the distributio
 
 ### 1. **Wikipedia Seed Data Generation**
 **Script**: `src/generate_wikipedia_seed_data.py`  
-**Purpose**: Extracts real Wikipedia articles to provide narrative inspiration and structural patterns for synthetic biographies.
+**Purpose**: Extracts real Wikipedia articles to provide narrative inspiration and structural patterns for synthetic biographies.  
 **Wikipedia Article Seed Source**: [Wikimedia Structured Wikipedia Dataset](https://huggingface.co/datasets/wikimedia/structured-wikipedia)  
 
 
@@ -65,15 +65,15 @@ PANORAMA generates fully synthetic datasets that closely emulate the distributio
 ### 3. **Wikipedia-Style Article Synthesis**
 **Script**: `src/generate_synthetic_wiki_style_article.py`  
 **Prompt**: `prompts/synthetic_article_gen_prompt.md`  
-**Model**: Azure OpenAI o3-mini
+**Model**: Azure OpenAI o3-mini  
 **Process**: Combines synthetic profiles with Wikipedia inspiration text to generate realistic biographies that maintain factual consistency while incorporating nuanced narrative elements.
 
 #### 3.1 **Extraction of Generated Articles**
-**Script**: `src/extract_generated_synthetic_passage.py`  
+**Script**: `src/extract_generated_synthetic_passage.py`    
 **Purpose**: Model results contain synthetic passages and seed wiki's usage notes, this module extracts synthetic passage.
 
 #### 3.2 **Clean entity contamination from seed wiki article**
-**Script**: `src/clean_generated_synthetic_passage.py`
+**Script**: `src/clean_generated_synthetic_passage.py`  
 **Purpose**: Cleans any contaimination such as entity name, dates, location from seed wiki-article in generated synthetic passages.
 
 ### 4. **Multi-Format Content Generation**
@@ -83,11 +83,11 @@ PANORAMA generates fully synthetic datasets that closely emulate the distributio
 **Purpose**: This module generates the various modalities of text that are primary contribution from PANORAMA dataset.
 
 #### 4.1 **Extraction of Generated Content**
-**Script**: `src/extract_generated_synthetic_online_data.py`
+**Script**: `src/extract_generated_synthetic_online_data.py`  
 **Purpose**: Various modalities of text generated are in natural language format, this scripts extracts it into a JSON schema.
 
 #### 4.2 **Fix missing social-id issue**
-**Script**: `src/fix_missing_social_id_hf.py`
+**Script**: `src/fix_missing_social_id_hf.py`  
 **Purpose**: Through manual analysis we identified that social media posts generated didn't have any social media handles associated with them in majority of cases. To mitigate this we either add a social handle or first name to the post.
 
 
@@ -106,15 +106,18 @@ PANORAMA-DataGen/
 │   ├── generate_synthetic_online_text_varieties.py  # Multi-format content
 │   ├── extract_generated_synthetic_passage.py      # Content extraction
 │   ├── extract_generated_synthetic_online_data.py  # Online data processing
-│   ├── create_aggregate_profile_content_hf.py     # Data aggregation
+│   ├── clean_generated_synthetic_passage.py        # Clean contamination from seed wiki
 │   ├── fix_missing_social_id_hf.py                # Data consistency
 │   ├── convert_tsv_to_hugging_face_dataset.py     # HF dataset conversion
 │   ├── analyze_and_visualize_dataset.py           # Dataset analysis
 │   ├── utilities/                          # Helper utilities
 │   │   └── convert_tsv_to_jsonl.py
 │   ├── notebooks/                          # Jupyter notebooks
-│   │   └── hf_dataset_replicator.ipynb
+│   │   ├── hf_dataset_replicator.ipynb     # Dataset replication and analysis
+│   │   └── education_to_job_sankey_plot_gen.ipynb  # Education-job correlation visualization
 │   └── misc/                               # Miscellaneous scripts
+│       ├── create_aggregate_profile_content_hf.py # Data aggregation
+│       └── retired_set_generation.py              # Retired dataset generation
 ├── prompts/                                # Generation prompts
 │   ├── synthetic_article_gen_prompt.md     # Article generation prompt
 │   └── synthetic_online_text_gen_prompt.md # Multi-format content prompt
@@ -123,19 +126,21 @@ PANORAMA-DataGen/
 └── LICENSE.md
 ```
 
-## 🚀 Quick Start
-
-### Prerequisites
+## 📦 Prerequisites
 - Python 3.8+
 - Azure OpenAI API access
-- Required packages: `faker`, `datasets`, `pandas`, `openai`, `tiktoken`
+- Required packages (see `requirements.txt` for exact versions):
+  - `faker` - Synthetic data generation
+  - `datasets` - Hugging Face datasets
+  - `pandas` - Data manipulation
+  - `openai` - Azure OpenAI API integration
+  - `tiktoken` - Token counting
+  - `numpy` - Numerical computing
+  - `matplotlib` & `seaborn` - Data visualization
+  - `plotly` - Interactive visualizations (Sankey diagrams)
+  - `ethnicolr` - Ethnicity prediction
+  - `huggingface-hub` - Hugging Face Hub integration
 
-### Installation
-```bash
-git clone https://github.com/your-username/PANORAMA-DataGen.git
-cd PANORAMA-DataGen
-pip install -r requirements.txt
-```
 
 ## 🔬 Research Applications
 
@@ -161,7 +166,7 @@ If you use PANORAMA in your research, please cite:
 
 ## 📜 License
 
-This project is licensed under the Creative Commons Attribution 4.0 International License (CC BY 4.0). See [LICENSE.md](LICENSE.md) for details.
+See [LICENSE.md](LICENSE.md) for details.
 
 ## ⚠️ Ethical Considerations
 
