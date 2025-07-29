@@ -300,12 +300,12 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Process JSONL records using Azure OpenAI Live Inference.")
 
     # Input Files
-    parser.add_argument("--api-key-file", default="/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Project/api_key.txt", help="Path to the file containing the Azure OpenAI API key.")
-    parser.add_argument("--prompt-file", default="/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/prompts/synthetic_online_text_gen_prompt.md", help="Path to the system prompt file.")
-    parser.add_argument("--input-file", default="/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/extracted_passages_azure_results.10K.03.jsonl", help="Path to the extracted and generated passages JSONL file.")
+    parser.add_argument("--api-key-file", default="/Users/sriramselvam/Code/PANORAMA-DataGen/Project/api_key.txt", help="Path to the file containing the Azure OpenAI API key.")
+    parser.add_argument("--prompt-file", default="/Users/sriramselvam/Code/PANORAMA-DataGen/prompts/synthetic_online_text_gen_prompt.md", help="Path to the system prompt file.")
+    parser.add_argument("--input-file", default="/Users/sriramselvam/Code/PANORAMA-DataGen/data/extracted_passages_azure_results.10K.03.jsonl", help="Path to the extracted and generated passages JSONL file.")
 
     # Output File
-    parser.add_argument("--output-base", default="/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/Azure_Synthetic_Data_10K.03.", help="Base path and filename for the output file (without extension). Timestamp and '.live_output.jsonl' will be added.")
+    parser.add_argument("--output-base", default="/Users/sriramselvam/Code/PANORAMA-DataGen/data/Azure_Synthetic_Data_10K.03.", help="Base path and filename for the output file (without extension). Timestamp and '.live_output.jsonl' will be added.")
 
     # Azure Configuration - REMEMBER TO UPDATE DEFAULTS OR PROVIDE VIA ARGUMENTS
     parser.add_argument("--azure-endpoint", default=DEFAULT_ENDPOINT, help="Azure OpenAI endpoint URL.")

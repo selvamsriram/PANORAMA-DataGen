@@ -4,7 +4,7 @@ from datasets import Dataset, Features, Value
 
 # --- Configuration ---
 # !!! IMPORTANT: Replace this with the actual path to your TSV file in Google Drive !!!
-DRIVE_FILE_PATH = '/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/Azure_Synthetic_Data_10K.pretraining.tsv'
+DRIVE_FILE_PATH = '/Users/sriramselvam/Code/PANORAMA-DataGen/data/Azure_Synthetic_Data_10K.pretraining.tsv'
 
 # --- Load Data from TSV ---
 try:

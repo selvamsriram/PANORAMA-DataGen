@@ -479,7 +479,7 @@ def generate_person(fake, locale, currency_symbol, country_code):
 
 # --- Main Execution Logic ---
 timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-output_file = f"/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/synthetic_profiles_{timestamp}.tsv"
+output_file = f"/Users/sriramselvam/Code/PANORAMA-DataGen/data/synthetic_profiles_{timestamp}.tsv"
 
 print(f"Generating synthetic dataset to: {output_file}")
 

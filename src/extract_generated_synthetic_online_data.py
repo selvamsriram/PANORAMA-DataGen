@@ -253,10 +253,10 @@ def create_pretraining_data(record: dict) -> List[Dict[str, str]]:
     return pretraining_records
 
 def main():
-    input_file = '/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/Azure_Synthetic_Data_10K.combined.jsonl'
-    output_file = '/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/Azure_Synthetic_Data_10K.processed.jsonl'
-    pretraining_file = '/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/tsv_variants/Azure_Synthetic_Data_10K.pretraining.tsv'
-    pretraining_hf_file = '/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/Azure_Synthetic_Data_10K.pretraining.hf.tsv'
+    input_file = '/Users/sriramselvam/Code/PANORAMA-DataGen/data/Azure_Synthetic_Data_10K.combined.jsonl'
+    output_file = '/Users/sriramselvam/Code/PANORAMA-DataGen/data/Azure_Synthetic_Data_10K.processed.jsonl'
+    pretraining_file = '/Users/sriramselvam/Code/PANORAMA-DataGen/data/tsv_variants/Azure_Synthetic_Data_10K.pretraining.tsv'
+    pretraining_hf_file = '/Users/sriramselvam/Code/PANORAMA-DataGen/data/Azure_Synthetic_Data_10K.pretraining.hf.tsv'
     stats_file = 'content_type_stats.json'
     repo_id = "srirxml/PANORAMA"
     

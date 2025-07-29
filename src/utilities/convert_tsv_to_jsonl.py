@@ -35,10 +35,10 @@ def tsv_to_jsonl(input_tsv, num_rows, seed, output_jsonl, is_serialized=False):
 
 if __name__ == "__main__":
     # Example usage
-    input_tsv = "/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/synthetic_profiles_20250418_231425.tsv"
+    input_tsv = "/Users/sriramselvam/Code/PANORAMA-DataGen/data/synthetic_profiles_20250418_231425.tsv"
     num_rows = 60000
     seed = 800
-    output_jsonl = "/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/synthetic_profiles_20250418_231425.jsonl"
+    output_jsonl = "/Users/sriramselvam/Code/PANORAMA-DataGen/data/synthetic_profiles_20250418_231425.jsonl"
     is_serialized = True  # Set to True if the TSV is serialized
     
     tsv_to_jsonl(input_tsv, num_rows, seed, output_jsonl, is_serialized)

@@ -1,8 +1,8 @@
 import json
 import re
 
-input_file = "/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/generated_passages_azure_results.10K.jsonl"   # change to your filename/path
-output_file = "/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/extracted_passages_azure_results.10K.jsonl" # output filename
+input_file = "/Users/sriramselvam/Code/PANORAMA-DataGen/data/generated_passages_azure_results.10K.jsonl"   # change to your filename/path
+output_file = "/Users/sriramselvam/Code/PANORAMA-DataGen/data/extracted_passages_azure_results.10K.jsonl" # output filename
 
 with open(input_file, "r", encoding="utf-8") as infile, open(output_file, "w", encoding="utf-8") as outfile:
     for line in infile:

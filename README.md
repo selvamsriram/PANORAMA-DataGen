@@ -74,7 +74,7 @@ PANORAMA generates fully synthetic datasets that closely emulate the distributio
 
 #### 3.2 **Clean entity contamination from seed wiki article**
 **Script**: `src/clean_generated_synthetic_passage.py`  
-**Purpose**: Cleans any contaimination such as entity name, dates, location from seed wiki-article in generated synthetic passages.
+**Purpose**: Drops records with contamination such as name, organization, non-GPE locations, facilities, product names from seed wiki-article in generated synthetic passages.
 
 ### 4. **Multi-Format Content Generation**
 **Script**: `src/generate_synthetic_online_text_varieties.py`  

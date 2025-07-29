@@ -138,7 +138,7 @@ def process_dataset(limit=10000):
     dataset = itertools.islice(dataset, 1003459, None)
     
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-    output_file = f"/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/wikipedia_people_{timestamp}.tsv"
+    output_file = f"/Users/sriramselvam/Code/PANORAMA-DataGen/data/wikipedia_people_{timestamp}.tsv"
     count = 0
     index = 0
 

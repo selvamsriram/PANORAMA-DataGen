@@ -8,8 +8,8 @@ import re
 import numpy as np
 
 # --- Configuration ---
-JSONL_FILE_PATH = "/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/Azure_Synthetic_Data_10K.processed.jsonl"  # <--- !!! SET YOUR FILE PATH HERE !!!
-OUTPUT_PLOT_DIR = "/Users/sriramselvam/Code/paraphrase_datagen/DataGeneration/Data/Data_Analysis_Results/" # Directory to save plots
+JSONL_FILE_PATH = "/Users/sriramselvam/Code/PANORAMA-DataGen/data/Azure_Synthetic_Data_10K.processed.jsonl"  # <--- !!! SET YOUR FILE PATH HERE !!!
+OUTPUT_PLOT_DIR = "/Users/sriramselvam/Code/PANORAMA-DataGen/data/Data_Analysis_Results/" # Directory to save plots
 TOP_N_CATEGORIES = 15 # For plots with many categories
 
 # --- 1. Color Theme and Style Setup ---
